@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Look For It</string>
+    <string name="selected_image_content">Image selectionnée par l\'utilisateur</string>
+    <string name="validate_image">Valider l\'image</string>
+    <string name="image_url">URL de l\'image</string>
+    <string name="image_score">Score : 0.89</string>
+
+</resources>
