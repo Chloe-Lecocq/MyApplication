@@ -1,3 +1,3 @@
 package com.example.myapplication
 
-class Picture(val title: String, val time: Int)
+class Picture(val id: Int, val url: String, val score:Float)
