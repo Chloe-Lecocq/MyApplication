@@ -108,11 +108,15 @@ class GalleryActivity : AppCompatActivity() {
 
     //handle result of picked image
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        image_uri = data?.data
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
+            image_uri = data?.data
             performCrop()
         }
-        if (requestCode == PIC_CROP){
+        if (resultCode == Activity.RESULT_OK && requestCode == PIC_CROP){
+            image_uri = data?.data
+            image_view.setImageURI(image_uri)
+        }
+        else{
             image_view.setImageURI(image_uri)
         }
     }
@@ -128,8 +132,8 @@ class GalleryActivity : AppCompatActivity() {
             //set crop properties
             cropIntent.putExtra("crop", "true")
             //indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1)
-            cropIntent.putExtra("aspectY", 1)
+            cropIntent.putExtra("aspectX", 0)
+            cropIntent.putExtra("aspectY", 0)
             //indicate output X and Y
             cropIntent.putExtra("outputX", 1036)
             cropIntent.putExtra("outputY", 1036)

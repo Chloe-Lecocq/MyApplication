@@ -112,6 +112,9 @@ class CaptureActivity : AppCompatActivity() {
             image_uri = data?.data
             image_view.setImageURI(image_uri)
         }
+        else{
+            image_view.setImageURI(image_uri)
+        }
     }
 
     fun performCrop(){
