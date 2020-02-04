@@ -10,6 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import kotlinx.android.synthetic.main.gallery_view.*
+import android.content.ActivityNotFoundException
+
+
+
+
+
+
 
 
 
@@ -19,6 +26,7 @@ import kotlinx.android.synthetic.main.gallery_view.*
 class GalleryActivity : AppCompatActivity() {
 
     var image_uri: Uri? = null
+    val PIC_CROP = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,9 +108,44 @@ class GalleryActivity : AppCompatActivity() {
 
     //handle result of picked image
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        image_uri = data?.data;
+        image_uri = data?.data
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
-            image_view.setImageURI(data?.data)
+            performCrop()
         }
+        if (requestCode == PIC_CROP){
+            image_view.setImageURI(image_uri)
+        }
+    }
+
+
+
+    fun performCrop(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            val cropIntent = Intent("com.android.camera.action.CROP")
+            //indicate image type and Uri
+            cropIntent.setDataAndType(image_uri, "image/*")
+            //set crop properties
+            cropIntent.putExtra("crop", "true")
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1)
+            cropIntent.putExtra("aspectY", 1)
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 1036)
+            cropIntent.putExtra("outputY", 1036)
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true)
+
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP)
+
+
+        } catch (anfe: ActivityNotFoundException) {
+            //display an error message
+            val errorMessage = "Whoops - your device doesn't support the crop action!"
+            val toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+
     }
 }
