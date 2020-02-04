@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.Manifest
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,12 +17,14 @@ import com.example.myapplication.R
 import kotlinx.android.synthetic.main.capture_view.*
 import kotlinx.android.synthetic.main.capture_view.image_view
 import kotlinx.android.synthetic.main.capture_view.validate_btn
+import kotlinx.android.synthetic.main.gallery_view.*
 
 class CaptureActivity : AppCompatActivity() {
 
     private val PERMISSION_CODE = 1000;
     private val IMAGE_CAPTURE_CODE = 1001
     var image_uri: Uri? = null
+    val PIC_CROP = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,11 +105,43 @@ class CaptureActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //called when image was captured from camera intent
-        if (resultCode == Activity.RESULT_OK){
-            //set image captured to image view
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_CAPTURE_CODE){
+            performCrop()
+        }
+        if (resultCode == Activity.RESULT_OK && requestCode == PIC_CROP){
+            image_uri = data?.data
             image_view.setImageURI(image_uri)
         }
+    }
+
+    fun performCrop(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            val cropIntent = Intent("com.android.camera.action.CROP")
+            //indicate image type and Uri
+            cropIntent.setDataAndType(image_uri, "image/*")
+            //set crop properties
+            cropIntent.putExtra("crop", "true")
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1)
+            cropIntent.putExtra("aspectY", 1)
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 1036)
+            cropIntent.putExtra("outputY", 1036)
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true)
+
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP)
+
+
+        } catch (anfe: ActivityNotFoundException) {
+            //display an error message
+            val errorMessage = "Whoops - your device doesn't support the crop action!"
+            val toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+
     }
 
 }
