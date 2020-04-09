@@ -1,19 +1,9 @@
 package com.example.myapplication
 
-import android.Manifest
-import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.media.Image
-import android.net.Uri
-import android.os.Build.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import kotlinx.android.synthetic.main.gallery_view.*
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,25 +12,16 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.results_layout.*
-import android.graphics.Color.parseColor
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.core.view.ViewCompat
-import com.google.gson.Gson
-import okhttp3.ResponseBody
 import retrofit2.converter.gson.GsonConverterFactory
 
 
 class ResultsActivity : AppCompatActivity() {
 
-    private val url = "http://172.27.221.4:8000/"
+    private val url = "http://127.0.0.1:8000/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +63,6 @@ class ResultsActivity : AppCompatActivity() {
     }
 
     fun createView(list: List<Picture>?){
-        // Get Screen metrics
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
 
@@ -96,21 +76,29 @@ class ResultsActivity : AppCompatActivity() {
 
             val imageView = ImageView(this)
             imageView.id = ViewCompat.generateViewId()
-            Glide.with(this).load("http://172.27.221.4:8000/" + element.url).into(imageView)
+            Glide.with(this).load(url + element.url).into(imageView)
+
+            val urlImage = TextView(this)
+            urlImage.text = element.marque
+            urlImage.textSize = 14f
 
             val scoreImage = TextView(this)
             scoreImage.text = element.score.toString()
             scoreImage.textSize = 14f
 
+
             constraintLayout.addView(imageView)
 
             imageView.requestLayout()
+            urlImage.requestLayout()
 
             scoreImage.setPadding(screen_width/2 + 30, 100, 0, 0);
+            urlImage.setPadding(screen_width/2 + 30, 150, 0, 0);
             imageView.setPadding(0, 5, 0, 5);
 
             imageView.getLayoutParams().width = screen_width/2
 
+            constraintLayout.addView(urlImage)
             constraintLayout.addView(scoreImage)
 
             linearLayout.addView(constraintLayout)

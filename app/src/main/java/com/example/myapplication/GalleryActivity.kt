@@ -14,15 +14,6 @@ import android.content.ActivityNotFoundException
 
 
 
-
-
-
-
-
-
-
-
-
 class GalleryActivity : AppCompatActivity() {
 
     var image_uri: Uri? = null
@@ -32,27 +23,20 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gallery_view)
 
-        //actionbar
         val actionbar = supportActionBar
-        //set actionbar title
         actionbar!!.title = "Sélectionner une photo"
-        //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
         actionbar.setDisplayHomeAsUpEnabled(true)
 
         //BUTTON CLICK
         img_pick_btn.setOnClickListener {
-            //check runtime permission
             if (VERSION.SDK_INT >= VERSION_CODES.M){
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
                     PackageManager.PERMISSION_DENIED){
-                    //permission denied
                     val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE);
-                    //show popup to request runtime permission
                     requestPermissions(permissions, PERMISSION_CODE)
                 }
                 else{
-                    //permission already granted
                     pickImageFromGallery()
                 }
             }

@@ -2,7 +2,6 @@ package com.example.myapplication
 
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,30 +12,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import android.widget.Toast
-import androidx.core.net.toFile
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.converter.gson.GsonConverterFactory
-import androidx.core.content.FileProvider
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.os.Environment
 import android.provider.MediaStore
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.text.SimpleDateFormat
-import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
 
-    private val postURL: String = "http://172.27.221.4:8000/"
+    private val postURL: String = "http://127.0.0.1:8000/"
     private var imageURI: Uri? = null
     private var idFile: Int? = null
 
@@ -98,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                             this@MainActivity,
                             response.errorBody()!!.string(),
                             Toast.LENGTH_SHORT
-                        ).show() // this will tell you why your api doesnt work most of time
+                        ).show()
                     }
                 }
                 override fun onFailure(call: Call<ResponseGet>, t: Throwable) {
